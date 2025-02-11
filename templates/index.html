@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}To-Do List{% endblock %}   
+
+{% block content %}
+    <div class="container">
+        <h1>To-Do List Manager</h1>
+        <!-- Form to Add a New Task -->
+        <form action="/add" method="post" class="task-form">
+            <input type="text" name="title" placeholder="Enter a new task" required class="task-input">
+            <select name="priority" class="priority-select">
+                <option value="High">High Priority</option>
+                <option value="Medium" selected>Medium Priority</option>
+                <option value="Low">Low Priority</option>
+            </select>
+            <input type="date" name="due_date" class="due-date-input" required>
+            <!-- Category Field -->
+            <select name="category" class="category-select">
+                <option value="Work">Work</option>
+                <option value="Personal">Personal</option>
+                <option value="Shopping">Shopping</option>
+                <!-- Add more categories as needed -->
+            </select>
+            <select name="recurrence" class="recurrence-select">
+                <option value="None">None</option>
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+            </select>
+            <button type="submit" class="add-task-btn">Add</button>
+        </form>
+        <!-- Upcoming Tasks Section -->
+        <h2>Upcoming Tasks</h2>
+        <table class="task-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Task</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Category</th>
+            <th>Recurrence</th> <!-- Display Recurrence -->
+            <th>Progress</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in upcoming_tasks %}
+            <tr class="{{ 'completed' if task['completed'] else '' }}">
+                <td>{{ task['id'] }}</td>
+                <td>{{ task['title'] }}</td>
+                <td>
+                    {% if task['completed'] %}
+                        Completed at: {{ task['completed_at'] }}
+                    {% else %}
+                        Not Completed
+                    {% endif %}
+                </td>
+                <td>{{ task['due_date'] }}</td>
+                <td>{{ task['category'] }}</td>
+                <td>{{ task['recurrence'] }}</td> <!-- Display Recurrence -->
+                <td>
+                    <!-- Display progress bar -->
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{ task['progress']|int }}%;"></div>
+                    </div>
+                    <span>{{ task['progress'] }}%</span>
+                </td>                
+                <td>
+                    {% if not task['completed'] %}
+                        <a href="/complete/{{ task['id'] }}" class="complete-btn">Complete</a>
+                    {% endif %}
+                    <a href="/update/{{ task['id'] }}" class="update-btn">Update</a>
+                    <a href="/delete/{{ task['id'] }}" class="delete-btn">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+        <!-- Display Tasks by Priority -->
+        <!-- High, Medium, Low Priority Tables remain the same as before, but include the category column -->
+        <h2>High Priority Tasks</h2>
+        <table class="task-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Task</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Category</th> <!-- Added Category Column -->
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks if task['priority'] == 'High' %}
+                <tr class="{{ 'completed' if task['completed'] else '' }}">
+                    <td>{{ task['id'] }}</td>
+                    <td>{{ task['title'] }}</td>
+                    <td>
+                        {% if task['completed'] %}
+                            Completed at: {{ task['completed_at'] }}
+                        {% else %}
+                            Not Completed
+                        {% endif %}
+                    </td>
+                    <td>{{ task['due_date'] }}</td>
+                    <td>{{ task['category'] }}</td> <!-- Display Category -->
+                    <td>
+                        {% if not task['completed'] %}
+                            <a href="/complete/{{ task['id'] }}" class="complete-btn">Complete</a>
+                        {% endif %}
+                        <a href="/update/{{ task['id'] }}" class="update-btn">Update</a>
+                        <a href="/delete/{{ task['id'] }}" class="delete-btn">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <!-- Medium Priority Table -->
+        <h2>Medium Priority Tasks</h2>
+        <table class="task-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Task</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks if task['priority'] == 'Medium' %}
+                <tr class="{{ 'completed' if task['completed'] else '' }}">
+                    <td>{{ task['id'] }}</td>
+                    <td>{{ task['title'] }}</td>
+                    <td>
+                        {% if task['completed'] %}
+                            Completed at: {{ task['completed_at'] }}
+                        {% else %}
+                            Not Completed
+                        {% endif %}
+                    </td>
+                    <td>{{ task['due_date'] }}</td>
+                    <td>{{ task['category'] }}</td>
+                    <td>
+                        {% if not task['completed'] %}
+                            <a href="/complete/{{ task['id'] }}" class="complete-btn">Complete</a>
+                        {% endif %}
+                        <a href="/update/{{ task['id'] }}" class="update-btn">Update</a>
+                        <a href="/delete/{{ task['id'] }}" class="delete-btn">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Low Priority Table -->
+        <h2>Low Priority Tasks</h2>
+        <table class="task-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Task</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks if task['priority'] == 'Low' %}
+                <tr class="{{ 'completed' if task['completed'] else '' }}">
+                    <td>{{ task['id'] }}</td>
+                    <td>{{ task['title'] }}</td>
+                    <td>
+                        {% if task['completed'] %}
+                            Completed at: {{ task['completed_at'] }}
+                        {% else %}
+                            Not Completed
+                        {% endif %}
+                    </td>
+                    <td>{{ task['due_date'] }}</td>
+                    <td>{{ task['category'] }}</td>
+                    <td>
+                        {% if not task['completed'] %}
+                            <a href="/complete/{{ task['id'] }}" class="complete-btn">Complete</a>
+                        {% endif %}
+                        <a href="/update/{{ task['id'] }}" class="update-btn">Update</a>
+                        <a href="/delete/{{ task['id'] }}" class="delete-btn">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+         <!-- Link to View Full Database -->
+        <a href="/view_all" class="view-all-link">
+            <button >View Your Task History</button>
+        </a>
+    </div>
+{% endblock %}

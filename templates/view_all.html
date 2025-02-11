@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Database</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1 class="center">All Task History..</h1>
+    <!-- Button to Check Analytics -->
+    <a href="/analytics" class="analytics-btn">
+        <button class="btn btn-primary">Check Analytics</button>
+    </a>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Completed</th>
+                <th>Completed At</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task['id'] }}</td>
+                <td>{{ task['title'] }}</td>
+                <td>{{ 'Yes' if task['completed'] else 'No' }}</td>
+                <td>{{ task['completed_at'] if task['completed_at'] else 'N/A' }}</td>
+                <td>{{ task['created_at'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>     
+</body>
+</html>

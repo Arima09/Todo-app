@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics and Insights{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Analytics and Insights</h1>
+        <div class="statistics">
+            <!-- Total Completed Tasks -->
+            <div class="stat-card">
+                <h2>Total Tasks Completed</h2>
+                <p>{{ total_completed }}</p>
+            </div>
+
+            <!-- Average Completion Time -->
+            <div class="stat-card">
+                <h2>Average Completion Time</h2>
+                <p>
+                    {% if avg_completion_time %}
+                        {{ avg_completion_time|round(2) }} days
+                    {% else %}
+                        No completed tasks
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Category-Wise Task Distribution -->
+            <div class="stat-card">
+                <h2>Category-wise Task Distribution</h2>
+                <table class="category-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Task Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category, count in category_distribution %}
+                            <tr>
+                                <td>{{ category }}</td>
+                                <td>{{ count }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="/" class="back-link">
+                <button class="btn btn-primary">Back to Task Manager</button>
+            </a>    
+        </div>
+    </div>
+{% endblock %}
